@@ -42,11 +42,11 @@ class Planets(db.Model):
 
 
 class Charachters(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    charachter_name = db.Column(db.String(120), unique=True, nullable=False)
-    home_planet = db.Column(db.String(120), primary_key=True)
-    persons_age = db.Column(db.Integer, primary_key=True)
-    persons_species = db.Column(db.String(120), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    charachter_name = db.Column(db.String(120), nullable=False)
+    home_planet = db.Column(db.String(120))
+    persons_age = db.Column(db.Integer, nullable=False)
+    persons_species = db.Column(db.String(120))
 
     def __repr__(self):
         return '<Charachters %r>' % self.id
@@ -56,8 +56,8 @@ class Charachters(db.Model):
             "id": self.id,
             "name": self.charachter_name,
             "home_planet": self.home_planet,
-            "age": self.persons_age,
-            "species": self.persons_species
+            "persons_age": self.persons_age,
+            "persons_species": self.persons_species
             # do not serialize the password, its a security breach
         }
 

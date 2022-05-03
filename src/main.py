@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, People, Planets
+from models import db, People, Planets, Charachters
 #from models import Person
 
 app = Flask(__name__)
@@ -57,9 +57,18 @@ def persons_id(people_id):
     return jsonify(singleperson.serialize())
 
 
+@app.route('/people', methods=['POST'])
+def create_people():
+    request_body = request.get_json()
+    new_people = People(
+        email=request_body['email'], password=request_body['password'], is_active=request_body['is_active'])
+    db.session.add(new_people)
+    db.session.commit()
+    return f"the new user {request_body['email']} was created succesfully", 200
+
+
 @app.route('/planets', methods=['GET'])
 def planets():
-
     planets = Planets.query.all()
     planets_list = list(map(lambda i: i.serialize(), planets))
     return jsonify(planets_list), 200
@@ -72,6 +81,16 @@ def planetsId(planets_id):
     return jsonify(singlePlanet.serialize())
 
 
+@app.route('/planets', methods=['POST'])
+def create_planets():
+    request_body = request.get_json()
+    new_planets = Planets(
+        planet_name=request_body['planet_name'], rotation_speed=request_body['rotation_speed'])
+    db.session.add(new_planets)
+    db.session.commit()
+    return f"the new planet {request_body['planet_name']} was created succesfully", 200
+
+
 @app.route('/charachters', methods=['GET'])
 def charachters():
 
@@ -80,12 +99,21 @@ def charachters():
     return jsonify(charachters_list), 200
 
 
-@app.route('//<int:charachters_id>', methods=['GET'])
+@app.route('/<int:charachters_id>', methods=['GET'])
 def charachtersId(charachters_id):
     singlecharachter = Charachters.query.get(charachters_id)
     print("this is the position of a single charachter: ", singlecharachter)
     return jsonify(singlecharachter.serialize())
 
+
+@app.route('/charachters', methods=['POST'])
+def create_charachters():
+    request_body = request.get_json()
+    new_charachters = Charachters(charachters_name=request_body['charachters_name'], home_planet=request_body['home_planet'],
+                                  persons_age=request_body['persons_age'], persons_species=request_body['persons_species'])
+    db.session.add(new_charachters)
+    db.session.commit()
+    return f"the new charachter {request_body['charachters_name']} was created succesfully", 200
 
 #     class Request(db.Model):
 #     __tablename__ = 'request'
