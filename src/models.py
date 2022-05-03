@@ -24,8 +24,8 @@ class People(db.Model):
 
 class Planets(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    planet_name = db.Column(db.String(120), unique=True, nullable=False)
-    rotation_speed = db.Column(db.String(120), unique=True, nullable=False)
+    planet_name = db.Column(db.String(120), unique=True)
+    rotation_speed = db.Column(db.String(120))
 
     def __repr__(self):
         return '<Planets %r>' % self.id
@@ -61,10 +61,9 @@ class Charachters(db.Model):
             # do not serialize the password, its a security breach
         }
 
-    class Favourites(db.Model):
-        id = db.Column(db.Integer, primary_key=True)
-        likedPlanets = "something"
-        likedCharachters = "something"
+
+class Favourites(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
 
     def serialize(self):
         return "ok"
