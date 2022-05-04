@@ -9,6 +9,9 @@ ports:
       visibility: public
 tasks:
     - init: |
+        cp .env.example .env &&
+        mysql -u root -e "CREATE DATABASE example" &&
+        pipenv install &&
         pipenv run upgrade;
       command: >
         pipenv run start;
