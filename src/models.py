@@ -4,7 +4,7 @@ db = SQLAlchemy()
 
 
 class People(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=True)
@@ -23,7 +23,7 @@ class People(db.Model):
 
 
 class Planets(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
     planet_name = db.Column(db.String(120), unique=True)
     rotation_speed = db.Column(db.String(120))
 
@@ -54,7 +54,7 @@ class Charachters(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "name": self.charachter_name,
+            "charachter_name": self.charachter_name,
             "home_planet": self.home_planet,
             "persons_age": self.persons_age,
             "persons_species": self.persons_species
@@ -63,7 +63,7 @@ class Charachters(db.Model):
 
 
 class Favourites(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
 
     def serialize(self):
         return "ok"

@@ -51,7 +51,8 @@ def handle_hello():
 
 @app.route('/people/<int:people_id>', methods=['GET'])
 def persons_id(people_id):
-
+    # if people_id is None:
+    #     flash("NO")
     singleperson = People.query.get(people_id)
     print("This is the position of a single person: ", singleperson)
     return jsonify(singleperson.serialize())
@@ -67,6 +68,19 @@ def create_people():
     return f"the new user {request_body['email']} was created succesfully", 200
 
 
+@app.route('/people/<int:people_id>', methods=['DELETE'])
+def delete_people(people_id):
+    request_body = request.get_json()
+    user_id = People.query.get(people_id)
+    if user_id is None:
+        raise APIException(
+            'This user doesnt exist, or has already been deleted', status_code=404)
+    delete_people = db.session.delete(user_id)
+    db.session.commit()
+    return f"the {request_body['email']}'s profile has been succesfully deleted", 200
+    # YOU WILL DELEte bY USING THE ID IN THE URL WHEN TRYING TO DELETE IN POSTMAN
+
+
 @app.route('/planets', methods=['GET'])
 def planets():
     planets = Planets.query.all()
@@ -76,6 +90,9 @@ def planets():
 
 @app.route('/planets/<int:planets_id>', methods=['GET'])
 def planetsId(planets_id):
+    if planet_id is None:
+        raise APIException(
+            'This Planet doesnt exist, or has been deleted', status_code=404)
     singlePlanet = Planets.query.get(planets_id)
     print("this is the position of a single person: ", singlePlanet)
     return jsonify(singlePlanet.serialize())
@@ -91,6 +108,19 @@ def create_planets():
     return f"the new planet {request_body['planet_name']} was created succesfully", 200
 
 
+@app.route('/planets/<int:planets_id>', methods=['DELETE'])
+def delete_planets(planets_id):
+    request_body = request.get_json()
+    planet_id = Planets.query.get(planets_id)
+    if planet_id is None:
+        raise APIException(
+            'This Planet doesnt exist, or has already been deleted', status_code=404)
+    delete_people = db.session.delete(planet_id)
+    db.session.commit()
+    return f"{request_body['name']} has been succesfully deleted", 200
+    # YOU WILL DELEte bY USING THE ID IN THE URL WHEN TRYING TO DELETE IN POSTMAN
+
+
 @app.route('/charachters', methods=['GET'])
 def charachters():
 
@@ -99,7 +129,7 @@ def charachters():
     return jsonify(charachters_list), 200
 
 
-@app.route('/<int:charachters_id>', methods=['GET'])
+@app.route('/charachters/<int:charachters_id>', methods=['GET'])
 def charachtersId(charachters_id):
     singlecharachter = Charachters.query.get(charachters_id)
     print("this is the position of a single charachter: ", singlecharachter)
@@ -109,11 +139,24 @@ def charachtersId(charachters_id):
 @app.route('/charachters', methods=['POST'])
 def create_charachters():
     request_body = request.get_json()
-    new_charachters = Charachters(charachters_name=request_body['charachters_name'], home_planet=request_body['home_planet'],
+    new_charachters = Charachters(charachter_name=request_body['charachter_name'], home_planet=request_body['home_planet'],
                                   persons_age=request_body['persons_age'], persons_species=request_body['persons_species'])
     db.session.add(new_charachters)
     db.session.commit()
-    return f"the new charachter {request_body['charachters_name']} was created succesfully", 200
+    return f"the new charachter {request_body['charachter_name']} was created succesfully", 200
+
+
+@app.route('/charachters/<int:charachters_id>', methods=['DELETE'])
+def delete_charachter(charachters_id):
+    charachter_id = Charachters.query.get(charachters_id)
+    print(charachter_id)
+    if charachter_id is None:
+        raise APIException(
+            'This charachter doesnt exist, or has already been deleted', status_code=404)
+    db.session.delete(charachter_id)
+    db.session.commit()
+    return f"It has been succesfully deleted", 200
+    # YOU WILL DELEte bY USING THE ID IN THE URL WHEN TRYING TO DELETE IN POSTMAN
 
 #     class Request(db.Model):
 #     __tablename__ = 'request'
